@@ -50,7 +50,7 @@ class ModelLoader:
     def _load_qwen25(self, model_path: Optional[str] = None):
         """Load Qwen2.5-VL model"""
         # Default to Qwen2.5-VL-7B if no path specified
-        path = model_path or "Qwen/Qwen2-VL-7B-Instruct"
+        path = model_path or "Qwen/Qwen2.5-VL-7B-Instruct"
 
         print(f"Loading Qwen2.5-VL from {path}...")
         self.model = AutoModel.from_pretrained(

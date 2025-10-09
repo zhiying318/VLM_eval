@@ -64,22 +64,27 @@ D) {options[0]}
 Answer with only the letter (A, B, C, or D)."""
 
     try:
-        # Fix: Prepare image for mLLM - remove the extra unsqueeze
-        pixel_values = load_image(sample['image'], max_num=12).to(torch.bfloat16).to(device)
-        
-        # Generate response
-        generation_config = dict(max_new_tokens=10, do_sample=False)
-        response = model.chat(
-            tokenizer,
-            pixel_values,  # Remove .unsqueeze(0) - load_image already handles batching
-            question,
-            generation_config
-        )
+        if model_name == "internvl3.5":
+            pixel_values = load_image(sample['image'], max_num=12).to(torch.bfloat16).to(device)
+            generation_config = dict(max_new_tokens=10, do_sample=False)
+            response = model.chat(
+                tokenizer,
+                pixel_values,
+                question,
+                generation_config
+            )
+        elif model_name == "qwen2.5":
+            query = tokenizer.from_list_format([
+                {'image': sample['image_path']},
+                {'text': question},
+            ])
+            response, _ = model.chat(tokenizer, query=query, history=None)
+        else:
+            raise ValueError(f"Unsupported model: {model_name}")
         
         print(f"Model response: {response}")
         
         # Memory cleanup
-        del pixel_values
         torch.cuda.empty_cache()
         
         return response
@@ -114,9 +119,9 @@ def main():
     if MODELS_AVAILABLE:
         # Check available GPUs and choose the least used one
         if torch.cuda.is_available():
-            # Check GPU 1 first (often less used)
-            torch.cuda.set_device(1)  # Use GPU 1
-            device = "cuda:1"
+            # Check GPU 0 first (often less used)
+            torch.cuda.set_device(0)  # Use GPU 0
+            device = "cuda:0"
         else:
             device = "cpu"
         
