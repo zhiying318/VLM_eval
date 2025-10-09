@@ -6,3 +6,9 @@ tqdm>=4.65.0
 accelerate>=0.20.0
 datasets>=2.14.0
 pandas>=1.5.0
+einops
+timm
+
+# FlashAttention2 for faster attention (optional)
+# Requires CUDA development tools and may need manual installation
+# flash-attn>=2.0.0  # Commented out due to compilation requirements

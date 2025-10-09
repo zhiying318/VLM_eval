@@ -29,8 +29,8 @@ class ModelLoader:
 
     def _load_internvl35(self, model_path: Optional[str] = None):
         """Load InternVL3.5 model"""
-        # Default to InternVL3.5-8B if no path specified
-        path = model_path or "OpenGVLab/InternVL3.5-8B"
+        # Default to InternVL3_5-8B if no path specified (note the underscore)
+        path = model_path or "OpenGVLab/InternVL3_5-8B"
 
         print(f"Loading InternVL3.5 from {path}...")
         self.model = AutoModel.from_pretrained(
